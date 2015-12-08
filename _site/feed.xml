@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>贪嗔痴的技术博客</title>
+    <description>分享开发遇到的问题以及经验总结
+</description>
+    <link>http://overfit.net/</link>
+    <atom:link href="http://overfit.net/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Tue, 08 Dec 2015 21:27:57 +0800</pubDate>
+    <lastBuildDate>Tue, 08 Dec 2015 21:27:57 +0800</lastBuildDate>
+    <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Welcome to Jekyll!</title>
+        <description>&lt;p&gt;You’ll find this post in your &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+
+&lt;p&gt;To add new posts, simply add a file in the &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory that follows the convention &lt;code class=&quot;highlighter-rouge&quot;&gt;YYYY-MM-DD-name-of-post.ext&lt;/code&gt; and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
+
+&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Hi, &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;Tom&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints &#39;Hi, Tom&#39; to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Check out the &lt;a href=&quot;http://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 08 Dec 2015 15:57:41 +0800</pubDate>
+        <link>http://overfit.net/jekyll/update/2015/12/08/welcome-to-jekyll.html</link>
+        <guid isPermaLink="true">http://overfit.net/jekyll/update/2015/12/08/welcome-to-jekyll.html</guid>
+        
+        
+        <category>jekyll</category>
+        
+        <category>update</category>
+        
+      </item>
+    
+      <item>
+        <title>巧用nc管理memcached缓存</title>
+        <description>&lt;p&gt;memcached作为成熟的缓存系统，被各大互联网公司广泛使用。memcached作为一个分布式的缓存系统，缓存的分片是通过客户端来做的。所以，如果要改动数据，就需要去每一个memcached实例上执行一遍这样的改动，才能确保最终改动了数据。&lt;/p&gt;
+
+&lt;p&gt;memcached提供了文本协议和二进制协议来操作缓存，利用文本协议我们可以方便的修改数据，举例如下：
+缓存里有一堆实体 entity:1 entity:3 …，现在根据运营或者数据的需要，需要更新某些实体。反映在memcached上就是把缓存的实体直接删除掉就可以了。假定文件
+entityIds.txt存放了要删除的实体id，每行一个。可以使用脚本来生成要删除的命令，保存到cmd.txt文件中&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;cat ./entityIds.txt | &lt;span class=&quot;k&quot;&gt;while &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;read &lt;/span&gt;LINE
+    &lt;span class=&quot;k&quot;&gt;do
+        &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;delete entity:&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$LINE&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;done&lt;/span&gt; &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;假定现在有两个memcached实例，部署在 cache1, cache2两台机器上，端口号都是 11211，我们只需要执行一个简单的脚本就可以达到想要的目的。&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;nc&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cache1&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;11211&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cmd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;txt&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;nc&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cache2&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;11211&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cmd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;txt&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;其实nc的功能还是很强大的，比如很多公司的线上环境都有跳板机来保障登录的安全性，传文件就必须先经过跳板机传输再传到对应的机器上，或者公司的op会提供一个传输文件的工具，如果线上机器的某些端口可以直接和开发机器连接，就可以用nc来传输文件了。&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;nc  -l 10000 &amp;gt; file.txt  &lt;span class=&quot;c&quot;&gt;#线上机器监听本机10000端口并把收到的内容存到本地file.txt文件。&lt;/span&gt;
+nc online-server1 10000 &amp;lt; send_file.txt&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;传输完了以后用 md5sum 命令检查下是否是一样的就可以了。 和同事之间传输文件也可以使用这种方式方便的传输，尤其是在没有qq的时候这样最方便了，比scp, sftp命令还要快。&lt;/p&gt;
+
+</description>
+        <pubDate>Sun, 06 Dec 2015 15:57:41 +0800</pubDate>
+        <link>http://overfit.net/memcached/nc/2015/12/06/nc-clean-memcached.html</link>
+        <guid isPermaLink="true">http://overfit.net/memcached/nc/2015/12/06/nc-clean-memcached.html</guid>
+        
+        
+        <category>memcached</category>
+        
+        <category>nc</category>
+        
+      </item>
+    
+  </channel>
+</rss>
