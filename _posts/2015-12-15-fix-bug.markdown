@@ -1,0 +1,42 @@
+---
+layout: post
+title:  "编程中的奇葩bug"
+date:   2015-12-15 20:08:41 +0800
+categories: bug fix
+---
+经常编码会发现有些bug很奇葩，刚开始找到的时候会叹息原来如此，课时等过了一段时间又会犯同样的毛病，这次找的快一些了，再次记录下来。
+
+## mysql事务最后忘记commit
+程序逻辑再一个事物里面，代码写的好好的，看了N遍，也换了很多种测试参数，但就是不起作用。单步调试以后才发现，原来最后没有commit。
+这个只是针对修改数据库时的问题，通常都是先拷贝数据库事物的模板，然后在上面改动，这时候很容易把提交事物的代码干掉了，就会出现这种情况。
+
+## Xmemcahced客户端读取一直抛异常
+通常伴随着大量的读超时。XmemcachedClient默认是只有一个TCP链接的，如果某次发送了一个非常大的批量查询请求，则有可能使得当前的链路broken掉。
+memcached服务依然是没有问题的，这个时候必须重启服务才可以让链路读写恢复正常。对于memcache要避免发送大批量查询的请求，这一般是由于内部系统一些批量查询操作造成的。
+给后台系统用的服务最好还是和线上隔离，因为后台系统在性能上的考虑会粗一些。
+
+## thrift读bufferSize使用默认值
+对于默认设置的thrift server, 如果用echo "ffffffff" | nc thriftHost thriftPort
+则thrift服务会挂掉，具体解释如下:
+
+>  Every time RpcServer {@link org.apache.thrift.server.AbstractNonblockingServer} process a request, it will try to allocate a buffer whose size is declared by the very first integer of socket buffer unless the buffer size is large than {@link org.apache.thrift.server.AbstractNonblockingServer#MAX_READ_BUFFER_BYTES}.  Large maxReadBufferBytes makes it easily to throw OOM when request is illegal, while too small value leads to an invalid RpcServer.  Set maxReadBufferBytes to a safe value to make RpcServer more robust with illegal request especially when you are not using rpc to do large data transmission.
+
+简单说来，就是thrift server将一个请求的前4个字节的值作为这次请求要占用的内存大小来看待，而默认最大大小是一个long可以表示的最大值, 所以很容易把内存搞出OOM。
+必须再初始化的时候填入一个默认最大值，比如100MB。
+
+## 支付宝wap支付页面跳转同步通知页面路径url不能设置超过一个的请求参数
+老版本wap支付这个参数叫做 call_back_url，新版本叫做 return_url。
+这个url是一个GET请求，但是请求参数不能超过一个，否则支付宝会报错, 出错情况如下:
+{% highlight ruby %}
+    res_error=<?xml version="1.0" encoding="utf-8"?>
+    <err>
+        <code>0000</code>
+        <sub_code>0000</sub_code>
+        <msg>system exception</msg>
+        <detail>系统异常</detail>
+    </err>&sec_id=MD5&service=alipay.wap.trade.create.direct&v=2.0
+{% endhighlight %}
+所以对于含有多个请求参数的call_back_url, 只能将参数放在路径里面。
+
+
+
