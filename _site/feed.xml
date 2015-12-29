@@ -6,9 +6,27 @@
 </description>
     <link>http://overfit.net/</link>
     <atom:link href="http://overfit.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 20 Dec 2015 21:13:45 +0800</pubDate>
-    <lastBuildDate>Sun, 20 Dec 2015 21:13:45 +0800</lastBuildDate>
+    <pubDate>Tue, 29 Dec 2015 11:01:32 +0800</pubDate>
+    <lastBuildDate>Tue, 29 Dec 2015 11:01:32 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>jdk Integer实现</title>
+        <description>&lt;h2 id=&quot;tostring-&quot;&gt;toString 使用负数模和除法来进行进制转换&lt;/h2&gt;
+&lt;p&gt;不知道用负数进行除和模运算是不是比正数要效率高
+一些与二进制相关的方法大量使用了位运算，比如计算二进制1的个数，高位0的个数，低位0的个数, 最高位为1的数值，最低位为1的数值, 按照二进制表示来反转，按照字节数组表示形式的反转。
+里面也有一个IntegerCache, 默认缓存[-128, 127]以内的数。如果要使用缓存后的结果，必须使用valueOf()方法。&lt;/p&gt;
+</description>
+        <pubDate>Mon, 21 Dec 2015 20:08:41 +0800</pubDate>
+        <link>http://overfit.net/jdk/integer/2015/12/21/jdk-interger.html</link>
+        <guid isPermaLink="true">http://overfit.net/jdk/integer/2015/12/21/jdk-interger.html</guid>
+        
+        
+        <category>jdk</category>
+        
+        <category>Integer</category>
+        
+      </item>
     
       <item>
         <title>编程中的奇葩bug</title>
@@ -47,6 +65,17 @@ memcached服务依然是没有问题的，这个时候必须重启服务才可�
     &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/err&amp;gt;&amp;amp;sec_id=MD5&amp;amp;service=alipay.wap.trade.create.direct&amp;amp;v=2.0&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;所以对于含有多个请求参数的call_back_url, 只能将参数放在路径里面。&lt;/p&gt;
+
+&lt;h2 id=&quot;rest302&quot;&gt;rest接口返回302被安卓系统劫持&lt;/h2&gt;
+&lt;p&gt;如果一个rest接口返回的是302重定向请求，会有诸多不方便。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;对于android或者iOS上的app来说，如果返回结果是302，且地址不是https, 系统会自动去请求302的url，这样有的依赖于状态码的功能就被系统劫持了。&lt;/li&gt;
+  &lt;li&gt;对于web来说，发送ajax请求，如果返回的结果是302，他也会继续获取返回的url指向的结果。&lt;/li&gt;
+  &lt;li&gt;运营商会对404, 301, 302等结果进行潜在的劫持，使得状态吗返回的是200等页面。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;所以对于rest服务来说，就应该杜绝302接口。如果一个接口被设计成返回302， 那一定不是用作rest服务。&lt;/p&gt;
 
 </description>
         <pubDate>Tue, 15 Dec 2015 20:08:41 +0800</pubDate>
