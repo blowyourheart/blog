@@ -6,8 +6,8 @@
 </description>
     <link>http://overfit.net/</link>
     <atom:link href="http://overfit.net/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 29 Dec 2015 11:01:32 +0800</pubDate>
-    <lastBuildDate>Tue, 29 Dec 2015 11:01:32 +0800</lastBuildDate>
+    <pubDate>Mon, 11 Jan 2016 11:05:41 +0800</pubDate>
+    <lastBuildDate>Mon, 11 Jan 2016 11:05:41 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -77,6 +77,8 @@ memcached服务依然是没有问题的，这个时候必须重启服务才可�
 
 &lt;p&gt;所以对于rest服务来说，就应该杜绝302接口。如果一个接口被设计成返回302， 那一定不是用作rest服务。&lt;/p&gt;
 
+&lt;h2 id=&quot;arraysaslist-&quot;&gt;Arrays.asList(…) 返回的是个常量列表&lt;/h2&gt;
+&lt;p&gt;如果有谁打算将这个函数返回的列表进行添加或者删除操作，那么就会得到意想不到的异常，而且很死的很难看。&lt;/p&gt;
 </description>
         <pubDate>Tue, 15 Dec 2015 20:08:41 +0800</pubDate>
         <link>http://overfit.net/bug/fix/2015/12/15/fix-bug.html</link>
